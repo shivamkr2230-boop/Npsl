@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <title>शारदा पुस्तकालय</title>
+  <style>
+    :root {
+      --primary: #2c7a7b;
+      --accent: #f6c567;
+      --bg: #f0f4f8;
+      --card-bg: #ffffff;
+      --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --text: #333;
+      --text-light: #666;
+      --text-dark: #222;
+      --success: #48bb78;
+      --error: #c0392b;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f0f4f8 0%, #e0e7f0 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--primary);
+      padding: 1.5rem 2rem;
+      color: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header img {
+      height: 40px;
+      object-fit: contain;
+    }
+
+    .header .actions {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .header button {
+      background: var(--accent);
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .header button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .header button:active {
+      transform: translateY(0);
+    }
+
+    .hero {
+      height: 300px;
+      background: url('library-bg.jpg') no-repeat center/cover;
+      margin-bottom: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.2);
+    }
+
+    .hero-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      text-align: center;
+      z-index: 2;
+    }
+
+    .facilities {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .facility {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .facility:hover {
+      transform: translateY(-5px);
+    }
+
+    .facility img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      margin-bottom: 1rem;
+    }
+
+    .facility h3 {
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .facility p {
+      color: var(--text-light);
+    }
+
+    .facility::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .facility:hover::after {
+      transform: scaleX(1);
+    }
+
+    .booking {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      margin-top: 2rem;
+      position: relative;
+    }
+
+    .booking::before,
+    .booking::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .booking::before { bottom: auto; top: 0; }
+    .booking::after  { bottom: 0; top: auto; }
+
+    .booking:hover::before,
+    .booking:hover::after {
+      transform: scaleX(1);
+    }
+
+    .booking h2 {
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    .booking h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    .seats {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .seat {
+      background: var(--card-bg);
+      border: 2px solid var(--text-light);
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .seat:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .seat.booked {
+      border-color: var(--success);
+      background: #e8f5e9;
+    }
+
+    .seat.booked::after {
+      content: 'Booked';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.3);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    .seat.confirmed {
+      border-color: var(--success);
+      background: #e8f5e9;
+    }
+
+    .seat.available { border-color: var(--text-light); }
+
+    .seat.selected {
+      border-color: var(--accent);
+      background: #e0e7f0;
+    }
+
+    .seat.selected::after {
+      content: 'Selected';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.3);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    .count {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .msg {
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+      text-align: center;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .msg.error   { background: #ffebee; color: #c0392b; }
+    .msg.success { background: #e8f5e9; color: #48bb78; }
+
+    .footer {
+      text-align: center;
+      padding: 2rem;
+      margin-top: 2rem;
+      border-top: 1px solid #eee;
+      color: var(--text-light);
+    }
+
+    .whatsapp-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 1rem;
+      transition: var(--transition);
+    }
+
+    .whatsapp-btn:hover {
+      background: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .confirm-btn {
+      display: none;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 1rem;
+      transition: var(--transition);
+    }
+
+    .confirm-btn:hover {
+      background: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .header { flex-direction: column; align-items: flex-start; }
+      .facilities { grid-template-columns: 1fr; }
+      .seat { font-size: 0.9rem; }
+    }
+  </style>
+  </head>
+  <body>
+  <header class="header">
+    <img src="logo.png" alt="शारदा पुस्तकालय">
+    <div class="actions">
+      <button id="bookBtn">सीट बुक गर्नुहोस्</button>
+    </div>
+  </header>
+
+  <main class="content">
+    <div class="hero">
+      <div class="hero-content">
+        <h1>शारदा पुस्तकालय</h1>
+        <p>शारदा पुस्तकालयमा स्वागत छ – विद्यार्थीहरू र पाठकहरूको लागि एक जीवन्त स्थान।</p>
+      </div>
+    </div>
+
+    <div class="count" id="seatCount">उपलब्ध सीटहरू: <span
+  id="count">18</span></div>
+
+    <div class="booking">
+      <h2>सीट आरक्षण गर्नुहोस्</h2>
+      <div class="seats" id="seats"></div>
+
+      <!-- New "सीट बुक गर्नुहोस्" button below the seat grid -->
+      <button class="confirm-btn" id="confirmBtn">चयन गरेको सीट बुक गर्नुहोस्</button>
+      <button class="whatsapp-btn" id="whatsappBtn">सीट बुक गर्नुहोस् via
+  WhatsApp</button>
+
+      <div id="message" class="msg"></div>
+      <small>Seats automatically cancel if not confirmed within <strong>2
+  days</strong>.</small>
+    </div>
+
+    <section class="facilities">
+      <div class="facility">
+        <img src="ro-purifier.png" alt="RO Water Purifier">
+        <h3>RO Water Purifier</h3>
+        <p>Clean drinking water available at all times.</p>
+      </div>
+      <div class="facility">
+        <img src="restroom.png" alt="Clean Restrooms">
+        <h3>Clean Restrooms</h3>
+        <p>Well-maintained facilities for all users.</p>
+      </div>
+      <div class="facility">
+        <img src="shoe.png" alt="Shoe Storage">
+        <h3>Shoe Storage</h3>
+        <p>Secure storage for personal belongings.</p>
+      </div>
+      <div class="facility">
+        <img src="ac.png" alt="Air-Conditioned Rooms">
+        <h3>Air-Conditioned Rooms</h3>
+        <p>Comfortable study environment.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 शारदा पुस्तकालय. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const TOTAL_SEATS = 18;
+    const BOOKING_KEY = 'libraryBooking';
+    const EXPIRY_MS = 2 * 24 * 60 * 60 * 1000; // 2 days
+
+    // Load or init booking data
+    let bookings = JSON.parse(localStorage.getItem(BOOKING_KEY) || '{}');
+    let seatCount = TOTAL_SEATS - Object.keys(bookings).length;
+
+    function renderSeats() {
+      const container = document.getElementById('seats');
+      container.innerHTML = '';
+      for (let i = 1; i <= TOTAL_SEATS; i++) {
+        const seatDiv = document.createElement('div');
+        seatDiv.className = 'seat';
+        seatDiv.textContent = `Seat ${i}`;
+        if (bookings[i]) {
+          seatDiv.classList.add('booked', 'confirmed');
+          seatDiv.title = 'Booked';
+        }
+        seatDiv.onclick = () => selectSeat(i);
+        container.appendChild(seatDiv);
+      }
+      document.getElementById('count').textContent = seatCount;
+    }
+
+    function selectSeat(id) {
+      // remove previous selection
+      document.querySelectorAll('.seat.selected').forEach(el =>
+  el.classList.remove('selected'));
+      // mark new selection
+      const sel = document.getElementById('seats').children[id - 1];
+      sel.classList.add('selected');
+
+      // Show confirm button only when a seat is selected
+      document.getElementById('confirmBtn').style.display = 'block';
+    }
+
+    function showMsg(text, isError) {
+      const msg = document.getElementById('message');
+      msg.textContent = text;
+      msg.style.background = isError ? '#ffebee' : '#e8f5e9';
+      msg.style.border = '1px solid ' + (isError ? '#c0392b' : '#48bb78');
+      msg.style.display = 'block';
+      setTimeout(() => { msg.style.display = 'none'; }, 3000);
+    }
+
+    async function confirmBooking() {
+      const selected = document.querySelector('.seat.selected');
+      if (!selected) {
+        showMsg('Please select a seat first.', true);
+        return;
+      }
+      const seatId = selected.textContent.replace('Seat ', '');
+      if (bookings[seatId]) {
+        showMsg('Seat already booked.', true);
+        return;
+      }
+      bookings[seatId] = Date.now();
+      localStorage.setItem(BOOKING_KEY, JSON.stringify(bookings));
+      seatCount--;
+      selected.classList.remove('selected');
+      selected.classList.add('booked', 'confirmed');
+      renderSeats();
+
+      showMsg(`Seat ${seatId} booked! You have 2 days to confirm.`, false);
+      setTimeout(releaseSeat, EXPIRY_MS, seatId);
+
+      // Trigger WhatsApp notification
+      await triggerWhatsAppNotification(seatId);
+
+      // Hide confirm button after booking
+      document.getElementById('confirmBtn').style.display = 'none';
+    }
+
+    function releaseSeat(seatId) {
+      if (!bookings[seatId]) return;
+      delete bookings[seatId];
+      localStorage.setItem(BOOKING_KEY, JSON.stringify(bookings));
+      seatCount++;
+      renderSeats();
+      showMsg(`Booking for Seat ${seatId} expired and was released.`, true);
+    }
+
+    async function triggerWhatsAppNotification(seatId) {
+      // Example using Twilio API – replace placeholders with actual
+  credentials
+      const twilioAccountSid = 'YOUR_TWILIO_ACCOUNT_SID';
+      const twilioAuthToken = 'YOUR_TWILIO_AUTH_TOKEN';
+      const twilioWhatsAppNumber = 'whatsapp:+14155238886'; // Twilio sandbox
+  number
+      const userWhatsAppNumber = '+91xxxxxxxxxx'; // Replace with recipient's
+  number
+
+      const message = `✨ New Seat Booking ✨\n\nSeat: ${seatId}\nBooked at:
+  ${new Date().toLocaleString()}\n\nPlease confirm within 2 days.`;
+
+      const url = `https://api.twilio.com/2010-04-01/Accounts/${twilioAccountSi
+  d}/Messages.json`;
+
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Basic ' + btoa(twilioAccountSid + ':' +
+  twilioAuthToken),
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: new URLSearchParams({
+            'From': twilioWhatsAppNumber,
+            'To': userWhatsAppNumber,
+            'Body': message
+          })
+        });
+        if (!res.ok) throw new Error('Network response was not ok');
+        const data = await res.json();
+        console.log('WhatsApp notification sent:', data);
+      } catch (err) {
+        console.error('Error sending WhatsApp notification:', err);
+        showMsg('Failed to send WhatsApp notification. Please try again
+  later.', true);
+      }
+    }
+
+    // Auto‑expire old bookings on page load
+    function purgeExpired() {
+      const now = Date.now();
+      Object.keys(bookings).forEach(id => {
+        if (now - bookings[id] > EXPIRY_MS) {
+          delete bookings[id];
+          seatCount++;
+        }
+      });
+      localStorage.setItem(BOOKING_KEY, JSON.stringify(bookings));
+      renderSeats();
+    }
+
+    // Initialize
+    purgeExpired();
+    renderSeats();
+
+    // Event listeners
+    document.getElementById('bookBtn').addEventListener('click',
+  confirmBooking);
+    document.getElementById('confirmBtn').addEventListener('click',
+  confirmBooking);
+    document.getElementById('whatsappBtn').addEventListener('click',
+  confirmBooking);
+  </script>
+  </body>
+  </html>
